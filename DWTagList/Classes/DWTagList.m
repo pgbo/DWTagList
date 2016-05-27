@@ -196,6 +196,15 @@
                   animated:animated];
 }
 
+- (DWTagView *)tagViewAtIndex:(NSUInteger)index
+{
+    DWTagView *tagView = (DWTagView *)[self viewWithTag:index];
+    if ([tagView isKindOfClass:[DWTagView class]]) {
+        return tagView;
+    }
+    return nil;
+}
+
 - (void)touchDownInside:(id)sender
 {
     UIButton *button = (UIButton*)sender;
@@ -208,12 +217,12 @@
     DWTagView *tagView = (DWTagView *)[button superview];
     [tagView setBackgroundColor:[self getBackgroundColor]];
     
-    if ([self.tagDelegate respondsToSelector:@selector(selectedTag:tagIndex:)]) {
-        [self.tagDelegate selectedTag:tagView.label.text tagIndex:tagView.tag];
+    if ([self.tagDelegate respondsToSelector:@selector(tagList:selectedTag:tagIndex:)]) {
+        [self.tagDelegate tagList:self selectedTag:tagView.label.text tagIndex:tagView.tag];
     }
     
-    if ([self.tagDelegate respondsToSelector:@selector(selectedTag:)]) {
-        [self.tagDelegate selectedTag:tagView.label.text];
+    if ([self.tagDelegate respondsToSelector:@selector(tagList:selectedTag:)]) {
+        [self.tagDelegate tagList:self selectedTag:tagView.label.text];
     }
     
     if (self.showTagMenu) {
@@ -338,7 +347,7 @@
         textSize = [attributedString boundingRectWithSize:CGSizeMake(maxWidth, 0) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
         _label.attributedText = [attributedString copy];
     } else {
-        textSize = [text sizeWithFont:font forWidth:maxWidth lineBreakMode:NSLineBreakByTruncatingTail];
+        textSize = [text boundingRectWithSize:CGSizeMake(maxWidth, 0) options:NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:font, NSParagraphStyleAttributeName: [NSMutableParagraphStyle new]} context:nil].size;
         _label.text = text;
     }
     

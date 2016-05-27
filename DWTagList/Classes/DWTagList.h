@@ -9,6 +9,7 @@
 
 IB_DESIGNABLE
 @protocol DWTagListDelegate, DWTagViewDelegate;
+@class DWTagView;
 
 @interface DWTagList : UIScrollView
 {
@@ -44,6 +45,7 @@ IB_DESIGNABLE
 - (void)display;
 - (CGSize)fittedSize;
 - (void)scrollToBottomAnimated:(BOOL)animated;
+- (DWTagView *)tagViewAtIndex:(NSUInteger)index;
 
 @end
 
@@ -73,8 +75,8 @@ IB_DESIGNABLE
 
 @optional
 
-- (void)selectedTag:(NSString *)tagName tagIndex:(NSInteger)tagIndex;
-- (void)selectedTag:(NSString *)tagName;
+- (void)tagList:(DWTagList *)tagList selectedTag:(NSString *)tagName tagIndex:(NSInteger)tagIndex;
+- (void)tagList:(DWTagList *)tagList selectedTag:(NSString *)tagName;
 - (void)tagListTagsChanged:(DWTagList *)tagList;
 
 @end
