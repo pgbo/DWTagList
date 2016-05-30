@@ -198,9 +198,10 @@
 
 - (DWTagView *)tagViewAtIndex:(NSUInteger)index
 {
-    DWTagView *tagView = (DWTagView *)[self viewWithTag:index];
-    if ([tagView isKindOfClass:[DWTagView class]]) {
-        return tagView;
+    for (UIView *subView in [self subviews]) {
+        if (index == subView.tag && [subView isKindOfClass:[DWTagView class]]) {
+            return (DWTagView *)subView;
+        }
     }
     return nil;
 }
