@@ -44,7 +44,8 @@
                         @"Tag Label 3",
                         @"Tag Label 4",
                         @"Long long long long long long Tag", nil];
-    [_tagList setTags:_array];
+    NSSet *selectedItemIndexes = [NSSet setWithObjects:@(0), @(2), nil];
+    [_tagList setTags:_array initialSelectedItemIndexes:selectedItemIndexes];
     [_tagList setTagDelegate:self];
 }
 
@@ -55,7 +56,7 @@
         [_array addObject:[_addTagField text]];
     }
     [_addTagField setText:@""];
-    [_tagList setTags:_array];
+    [_tagList setTags:_array initialSelectedItemIndexes:_tagList.initialSelectedItemIndexes];
 }
 
 - (void)viewDidUnload

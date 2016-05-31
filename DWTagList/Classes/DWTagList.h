@@ -13,16 +13,18 @@ IB_DESIGNABLE
 
 @interface DWTagList : UIScrollView
 {
-    UIView      *view;
-    NSArray     *textArray;
-    CGSize      sizeFit;
-    UIColor     *lblBackgroundColor;
+    UIView                  *view;
+    NSArray<NSString *>     *textArray;
+    NSSet<NSNumber *>       *initialSelectedItemIndexes;
+    CGSize                  sizeFit;
+    UIColor                 *lblBackgroundColor;
 }
 
 @property (nonatomic) BOOL viewOnly;
 @property (nonatomic) BOOL showTagMenu;
 @property (nonatomic, strong) UIView *view;
 @property (nonatomic, strong) NSArray *textArray;
+@property (nonatomic, readonly) NSSet<NSNumber *> *initialSelectedItemIndexes;
 @property (nonatomic, weak) id<DWTagListDelegate> tagDelegate;
 @property (nonatomic, strong) IBInspectable UIColor *highlightedBackgroundColor;
 @property (nonatomic) IBInspectable BOOL automaticResize;
@@ -41,7 +43,7 @@ IB_DESIGNABLE
 
 - (void)setTagBackgroundColor:(UIColor *)color;
 - (void)setTagHighlightColor:(UIColor *)color;
-- (void)setTags:(NSArray *)array;
+- (void)setTags:(NSArray<NSString *> *)array initialSelectedItemIndexes:(NSSet<NSNumber *> *)selectedItemIndexes;
 - (void)display;
 - (CGSize)fittedSize;
 - (void)scrollToBottomAnimated:(BOOL)animated;

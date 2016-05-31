@@ -30,7 +30,7 @@
 
 @implementation DWTagList
 
-@synthesize view, textArray, automaticResize;
+@synthesize view, textArray, initialSelectedItemIndexes, automaticResize;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -68,9 +68,10 @@
     self.showTagMenu = DEFAULT_SHOW_TAG_MENU;
 }
 
-- (void)setTags:(NSArray *)array
+- (void)setTags:(NSArray<NSString *> *)array initialSelectedItemIndexes:(NSSet<NSNumber *> *)selectedItemIndexes
 {
     textArray = [[NSArray alloc] initWithArray:array];
+    initialSelectedItemIndexes = [NSSet setWithSet:selectedItemIndexes];
     sizeFit = CGSizeZero;
     if (automaticResize) {
         [self display];
@@ -159,7 +160,11 @@
         previousFrame = tagView.frame;
         gotPreviousFrame = YES;
         
-        [tagView setBackgroundColor:[self getBackgroundColor]];
+        if ([initialSelectedItemIndexes containsObject:@(tag)]) {
+            [tagView setBackgroundColor:self.highlightedBackgroundColor];
+        } else {
+            [tagView setBackgroundColor:[self getBackgroundColor]];
+        }
         [tagView setCornerRadius:self.cornerRadius];
         [tagView setBorderColor:self.borderColor.CGColor];
         [tagView setBorderWidth:self.borderWidth];
@@ -299,7 +304,9 @@
 - (void)tagViewWantsToBeDeleted:(DWTagView *)tagView {
     NSMutableArray *mTextArray = [self.textArray mutableCopy];
     [mTextArray removeObject:tagView.label.text];
-    [self setTags:mTextArray];
+    NSMutableSet *mInitialSelectedItemIndexes = [NSMutableSet setWithSet:self.initialSelectedItemIndexes];
+    [mInitialSelectedItemIndexes removeObject:@(tagView.tag)];
+    [self setTags:mTextArray initialSelectedItemIndexes:mInitialSelectedItemIndexes];
     
     if ([self.tagDelegate respondsToSelector:@selector(tagListTagsChanged:)]) {
         [self.tagDelegate tagListTagsChanged:self];
